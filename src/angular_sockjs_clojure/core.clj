@@ -168,7 +168,16 @@
     client-session)
 
   ;; when a connection closes this method is called
-  (on-close [this session] session))
+  (on-close [this client-session]
+
+
+    (let [id (:id client-session)
+          client-name (id->name id)]
+      (println "Good bye!" id)
+      (swap! clients dissoc id)
+      (broadcast {:type "user-left" :name client-name}))
+    (println "Current users: " (get-users))
+    client-session))
 
 (defroutes my-routes
   (GET "/" [] "hello world")
