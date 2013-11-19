@@ -60,6 +60,13 @@
   (swap! guest-name-count inc)
   (str "Guest " @guest-name-count))
 
+(defn get-users
+  "Returns list of current users."
+  []
+  (->> @clients
+       vals
+       (map :name)))
+
 (defrecord ChatConnection []
   SockjsConnection
   ;; on open is call whenever a new session is initiated.
