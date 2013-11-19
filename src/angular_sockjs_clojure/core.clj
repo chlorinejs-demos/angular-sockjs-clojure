@@ -98,6 +98,11 @@
       :type "text"}
      id)))
 
+(defn update-name!
+  "Changes client's name with a new one."
+  [client-id new-name]
+  (swap! clients assoc-in [client-id :name] new-name))
+
 (defrecord ChatConnection []
   SockjsConnection
   ;; on open is call whenever a new session is initiated.
