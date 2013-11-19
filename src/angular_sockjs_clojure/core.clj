@@ -13,6 +13,9 @@
   client's id and values are Client records."}
   clients (atom {}))
 
+(defrecord Client
+  [name session])
+
 (defrecord ChatConnection []
   SockjsConnection
   ;; on open is call whenever a new session is initiated.
