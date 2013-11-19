@@ -36,6 +36,14 @@
    data
    {:key-fn (fn [k] (->camelCase (name k)))}))
 
+(defn whisper
+  "Sends messages to a single client"
+  [id msg]
+  (when-let [client-session (:session (get @clients id))]
+    (send! client-session {:type :msg
+                           :content
+                           (generate-cl2-string msg)})))
+
 (defrecord ChatConnection []
   SockjsConnection
   ;; on open is call whenever a new session is initiated.
