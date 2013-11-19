@@ -103,6 +103,22 @@
   [client-id new-name]
   (swap! clients assoc-in [client-id :name] new-name))
 
+(defn on-change-name
+  "Handles on-change-name events"
+  [data client-session]
+  (println "Change name with " data ", " (:id client-session) "?")
+  (let [id (:id client-session)]
+    (when (available-new-name? (:name data))
+      (let [old-name (id->name id)
+            new-name (:name data)]
+        (println "Hmm,.." old-name
+                 " wants to change their name to " new-name)
+        (update-name! id new-name)
+        (println "@clients: " @clients)
+        (broadcast {:type "change-name"
+                    :new-name new-name
+                    :old-name old-name})))))
+
 (defrecord ChatConnection []
   SockjsConnection
   ;; on open is call whenever a new session is initiated.
