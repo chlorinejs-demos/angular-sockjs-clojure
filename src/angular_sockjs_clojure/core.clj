@@ -161,8 +161,11 @@
     client-session)
 
   ;; on message is call when a new message arrives at the server.
-  (on-message [this session msg]
-    (send! session {:type :msg :content msg}))
+  (on-message [this client-session raw-msg]
+    (let [data (parse-string raw-msg true)]
+      (println "on-message: " data)
+      (on-data data client-session))
+    client-session)
 
   ;; when a connection closes this method is called
   (on-close [this session] session))
