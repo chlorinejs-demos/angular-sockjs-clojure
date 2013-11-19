@@ -1,0 +1,13 @@
+{
+  "name": "angular-sockjs-im",
+  "version": "0.1.0",
+  "dependencies": {
+    "angular": "",
+    "sockjs": "~0.3.4"
+  },
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "components"
+  ]
+}
