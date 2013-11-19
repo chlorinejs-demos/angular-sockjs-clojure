@@ -54,6 +54,12 @@
       (send! (:session client) {:type :msg
                                 :content (generate-cl2-string msg)}))))
 
+(defn gen-guest-name!
+  "Generates a unique guest name for each newcomer."
+  []
+  (swap! guest-name-count inc)
+  (str "Guest " @guest-name-count))
+
 (defrecord ChatConnection []
   SockjsConnection
   ;; on open is call whenever a new session is initiated.
