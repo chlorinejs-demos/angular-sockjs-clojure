@@ -72,6 +72,11 @@
   [id]
   (:name (get @clients id)))
 
+(defn available-new-name?
+  "Checks if a new user-name has not been used yet."
+  [new-name]
+  (not (contains? (set (get-users)) new-name)))
+
 (defrecord ChatConnection []
   SockjsConnection
   ;; on open is call whenever a new session is initiated.
