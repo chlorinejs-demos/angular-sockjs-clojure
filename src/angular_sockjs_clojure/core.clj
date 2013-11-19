@@ -44,6 +44,16 @@
                            :content
                            (generate-cl2-string msg)})))
 
+(defn broadcast
+  "Sends messages to many clients. An excluded client can be specified"
+  [msg & ids-to-ignore]
+  (println "Broadcasting " msg ids-to-ignore)
+  (let [ignored-ids-set (set ids-to-ignore)]
+    (doseq [[id client] @clients
+            :when (not (contains? ignored-ids-set id))]
+      (send! (:session client) {:type :msg
+                                :content (generate-cl2-string msg)}))))
+
 (defrecord ChatConnection []
   SockjsConnection
   ;; on open is call whenever a new session is initiated.
