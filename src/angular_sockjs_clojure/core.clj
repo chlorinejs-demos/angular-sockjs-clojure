@@ -1,8 +1,12 @@
 (ns angular-sockjs-clojure.core
   (:require [methojure.sockjs.session :refer :all]
+            [cheshire.core :refer [generate-string parse-string]]
+            [clojure.string :as str]
             [methojure.sockjs.core :refer :all]
             [compojure.core :refer [GET defroutes]]
             [org.httpkit.server :refer [run-server]]
+            [ring.middleware.reload :refer [wrap-reload]]
+            [ring.middleware.resource :refer [wrap-resource]]
             [ring.middleware.params :refer [wrap-params]]))
 
 (defrecord ChatConnection []
