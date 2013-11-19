@@ -144,7 +144,21 @@
 (defrecord ChatConnection []
   SockjsConnection
   ;; on open is call whenever a new session is initiated.
-  (on-open [this session] session)
+  (on-open [this client-session]
+    (let [id (:id client-session)
+          new-name (gen-guest-name!)]
+      (println "Fire in the hole!" id)
+      (swap! clients
+             assoc id (->Client new-name client-session))
+      (let [current-users (get-users)]
+        (broadcast {:type "new-user" :name new-name
+                    :users current-users}
+                   id)
+        (whisper id
+                 {:type "init"
+                  :name new-name
+                  :users current-users})))
+    client-session)
 
   ;; on message is call when a new message arrives at the server.
   (on-message [this session msg]
