@@ -77,6 +77,15 @@
   [new-name]
   (not (contains? (set (get-users)) new-name)))
 
+(defn on-init
+  [client-session]
+  (let [id (:id client-session)]
+    (println "Oh dear, init from " id)
+    (whisper
+     id
+     {:type "init"
+      :name (:name client-session) :users (get-users)})))
+
 (defrecord ChatConnection []
   SockjsConnection
   ;; on open is call whenever a new session is initiated.
