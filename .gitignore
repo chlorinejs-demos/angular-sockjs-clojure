@@ -1,5 +1,6 @@
 /target
 /classes
+/node_modules
 /checkouts
 pom.xml
 pom.xml.asc
