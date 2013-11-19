@@ -184,6 +184,11 @@
   (sockjs-handler
    "/chat" (->ChatConnection) {:response-limit 4096}))
 
+(def final-routes
+  (-> my-routes
+      (wrap-resource "public")
+      (wrap-params)
+      (wrap-reload)))
 
 (defn start-server []
   (run-server (-> my-routes (wrap-params)) {:port 8001}))
