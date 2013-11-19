@@ -67,6 +67,11 @@
        vals
        (map :name)))
 
+(defn id->name
+  "Gets a client's name by its id."
+  [id]
+  (:name (get @clients id)))
+
 (defrecord ChatConnection []
   SockjsConnection
   ;; on open is call whenever a new session is initiated.
