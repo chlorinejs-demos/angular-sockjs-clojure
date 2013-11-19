@@ -24,6 +24,18 @@
 (def ^{:doc "Counter to append to guest name"}
   guest-name-count (atom 0))
 
+(defn ->camelCase [^String method-name]
+  (str/replace method-name #"-(\w)"
+               #(str/upper-case (second %1))))
+
+(defn generate-cl2-string
+  "Converts Clojure maps to JSON-encoded ChlorineJs-friendly ones
+  by camel-casing their keys."
+  [data]
+  (generate-string
+   data
+   {:key-fn (fn [k] (->camelCase (name k)))}))
+
 (defrecord ChatConnection []
   SockjsConnection
   ;; on open is call whenever a new session is initiated.
