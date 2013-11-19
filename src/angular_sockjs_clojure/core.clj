@@ -191,7 +191,8 @@
       (wrap-reload)))
 
 (defn start-server []
-  (run-server (-> my-routes (wrap-params)) {:port 8001}))
+  (run-server final-routes
+              {:port 8001}))
 
 (defn -main []
   (start-server)
