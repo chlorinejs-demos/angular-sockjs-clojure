@@ -86,6 +86,18 @@
      {:type "init"
       :name (:name client-session) :users (get-users)})))
 
+(defn on-text
+  "Handles text events"
+  [data client-session]
+  (println "Got some text. Have fun!")
+  ;; TODO: strip string?
+  (let [id (:id client-session)]
+    (broadcast
+     {:name (id->name id)
+      :message (:message data)
+      :type "text"}
+     id)))
+
 (defrecord ChatConnection []
   SockjsConnection
   ;; on open is call whenever a new session is initiated.
