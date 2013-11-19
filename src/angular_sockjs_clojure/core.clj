@@ -119,6 +119,28 @@
                     :new-name new-name
                     :old-name old-name})))))
 
+(defn on-data
+  "Handles messages when an on-data event happens"
+  [data client-session]
+  ;; TODO: max data size?
+  (println "Yummy... got some data" ;;(type data)
+           )
+  ;; (set! data (deserialize data))
+  (println "Good, let's see" (pr-str (:type data)))
+  (println "Data: " data)
+  (println "Session:" (:id client-session))
+  (cond
+   (and (= (:type data) "text")
+        (seq (:message data)))
+   (on-text data client-session)
+
+   (= (:type data) "init")
+   (on-init client-session)
+
+   (and (= (:type data) "change-name")
+        (seq (:name data)))
+   (on-change-name data client-session)))
+
 (defrecord ChatConnection []
   SockjsConnection
   ;; on open is call whenever a new session is initiated.
