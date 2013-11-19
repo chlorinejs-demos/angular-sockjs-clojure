@@ -16,6 +16,14 @@
 (defrecord Client
   [name session])
 
+;; Newcomers are supplied with nick names in the form of a string
+;; "Guest " followed by an unique number. A counter atom is used.
+;; every time a new nick name is supplied, its value will be increased
+;; by one.
+;; Guests can change their names later.
+(def ^{:doc "Counter to append to guest name"}
+  guest-name-count (atom 0))
+
 (defrecord ChatConnection []
   SockjsConnection
   ;; on open is call whenever a new session is initiated.
