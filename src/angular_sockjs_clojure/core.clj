@@ -181,7 +181,9 @@
 
 (defroutes my-routes
   (GET "/" [] "hello world")
-  (sockjs-handler "/echo" (->ChatConnection) {:response-limit 4096}))
+  (sockjs-handler
+   "/chat" (->ChatConnection) {:response-limit 4096}))
+
 
 (defn start-server []
   (run-server (-> my-routes (wrap-params)) {:port 8001}))
