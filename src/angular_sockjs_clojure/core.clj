@@ -56,7 +56,10 @@
 (defn broadcast
   "Sends messages to many clients. An excluded client can be specified"
   [msg & ids-to-ignore]
-  (println "Broadcasting " msg ids-to-ignore)
+  (timbre/info (str "Broadcasting "  msg
+                    (when-let [ids ids-to-ignore]
+                      (str " excluding "
+                           (str/join ", " ids)))))
   (let [ignored-ids-set (set ids-to-ignore)]
     (doseq [[id client] @clients
             :when (not (contains? ignored-ids-set id))]
