@@ -160,7 +160,7 @@
   (on-open [this client-session]
     (let [id (:id client-session)
           new-name (gen-guest-name!)]
-      (println "Fire in the hole!" id)
+      (timbre/info "New client connection: " id)
       (swap! clients
              assoc id (->Client new-name client-session))
       (let [current-users (get-users)]
@@ -176,7 +176,6 @@
   ;; on message is call when a new message arrives at the server.
   (on-message [this client-session raw-msg]
     (let [data (parse-string raw-msg true)]
-      (println "on-message: " data)
       (on-data data client-session))
     client-session)
 
@@ -186,10 +185,10 @@
 
     (let [id (:id client-session)
           client-name (id->name id)]
-      (println "Good bye!" id)
+      (timbre/info "Good bye, " id "!")
       (swap! clients dissoc id)
       (broadcast {:type "user-left" :name client-name}))
-    (println "Current users: " (get-users))
+    (timbre/info "Current users: " (get-users))
     client-session))
 
 (defroutes my-routes
