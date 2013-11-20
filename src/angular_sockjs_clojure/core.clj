@@ -98,6 +98,11 @@
      {:type "init"
       :name (:name client-session) :users (get-users)})))
 
+(defn truncate
+  "truncates a string to the given length"
+  [^String s limit]
+  (apply str (take limit s)))
+
 (defn on-text
   "Handles text events"
   [data client-session]
