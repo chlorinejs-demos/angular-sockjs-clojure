@@ -2,6 +2,7 @@
   (:require [methojure.sockjs.session :refer :all]
             [cheshire.core :refer [generate-string parse-string]]
             [clojure.string :as str]
+            [taoensso.timbre :as timbre]
             [methojure.sockjs.core :refer :all]
             [compojure.core :refer [GET defroutes]]
             [org.httpkit.server :refer [run-server]]
@@ -191,16 +192,13 @@
   (sockjs-handler
    "/chat" (->ChatConnection) {:response-limit 4096}))
 
-(def final-routes
+(def app
   (-> my-routes
       (wrap-resource "public")
-      (wrap-params)
-      (wrap-reload)))
+      (wrap-params)))
 
-(defn start-server []
-  (run-server final-routes
-              {:port 8001}))
-
-(defn -main []
-  (start-server)
-  (println "Server started."))
+(defn -main [& args]
+  (run-server
+    (if (dev? args) (wrap-reload app) app)
+    {:port (port args)})
+  (timbre/info "server started on port"))
