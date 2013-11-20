@@ -203,6 +203,6 @@
 
 (defn -main [& args]
   (run-server
-    (if (dev? args) (wrap-reload app) app)
-    {:port (port args)})
-  (timbre/info "server started on port"))
+   (if (dev? args) (wrap-reload app) app)
+   {:port (port args)})
+  (timbre/info "server started on port" (port args)))
