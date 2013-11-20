@@ -9,6 +9,8 @@
             [ring.middleware.resource :refer [wrap-resource]]
             [ring.middleware.params :refer [wrap-params]]))
 
+(defn dev? [args] (some #{"-dev"} args))
+
 (def ^{:doc "Clients are stored in an atom as a hash-map with keys are
   client's id and values are Client records."}
   clients (atom {}))
