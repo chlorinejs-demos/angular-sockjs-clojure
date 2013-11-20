@@ -11,6 +11,11 @@
 
 (defn dev? [args] (some #{"-dev"} args))
 
+(defn port [args]
+  (if-let [port (first (remove #{"-dev"} args))]
+    (Integer/parseInt port)
+    3000))
+
 (def ^{:doc "Clients are stored in an atom as a hash-map with keys are
   client's id and values are Client records."}
   clients (atom {}))
