@@ -5,5 +5,7 @@
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.5.1"]
                  [http-kit-sockjs "0.2.0-SNAPSHOT"]
+                 [lib-noir "0.7.5"]
+                 [com.taoensso/timbre "2.7.1"]
                  [ring/ring-devel "1.1.8"]]
   :main angular-sockjs-clojure.core)
