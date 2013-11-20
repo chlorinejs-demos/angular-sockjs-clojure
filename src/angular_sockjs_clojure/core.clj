@@ -106,12 +106,11 @@
 (defn on-text
   "Handles text events"
   [data client-session]
-  (println "Got some text. Have fun!")
-  ;; TODO: strip string?
   (let [id (:id client-session)]
+    (timbre/info "text message from" id)
     (broadcast
      {:name (id->name id)
-      :message (:message data)
+      :message (truncate (:message data) 140)
       :type "text"}
      id)))
 
