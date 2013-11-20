@@ -92,7 +92,7 @@
 (defn on-init
   [client-session]
   (let [id (:id client-session)]
-    (println "Oh dear, init from " id)
+    (timbre/info "init message from " id)
     (whisper
      id
      {:type "init"
