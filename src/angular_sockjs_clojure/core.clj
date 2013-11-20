@@ -140,12 +140,8 @@
   "Handles messages when an on-data event happens"
   [data client-session]
   ;; TODO: max data size?
-  (println "Yummy... got some data" ;;(type data)
-           )
-  ;; (set! data (deserialize data))
-  (println "Good, let's see" (pr-str (:type data)))
-  (println "Data: " data)
-  (println "Session:" (:id client-session))
+  (timbre/info "Data: " data
+               " from session of " (:id client-session))
   (cond
    (and (= (:type data) "text")
         (seq (:message data)))
