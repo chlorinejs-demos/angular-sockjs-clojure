@@ -8,7 +8,8 @@
             [org.httpkit.server :refer [run-server]]
             [ring.middleware.reload :refer [wrap-reload]]
             [ring.middleware.resource :refer [wrap-resource]]
-            [ring.middleware.params :refer [wrap-params]]))
+            [ring.middleware.params :refer [wrap-params]])
+  (:gen-class))
 
 (defn dev? [args] (some #{"-dev"} args))
 
