@@ -122,15 +122,16 @@
 (defn on-change-name
   "Handles on-change-name events"
   [data client-session]
-  (println "Change name with " data ", " (:id client-session) "?")
+  (timbre/info "Change of name request " data
+               "from " (:id client-session))
   (let [id (:id client-session)]
     (when (available-new-name? (:name data))
       (let [old-name (id->name id)
             new-name (:name data)]
-        (println "Hmm,.." old-name
-                 " wants to change their name to " new-name)
+        (timbre/info old-name
+                     " wants to change their name to " new-name)
         (update-name! id new-name)
-        (println "@clients: " @clients)
+        (timbre/info "@clients: " @clients)
         (broadcast {:type "change-name"
                     :new-name new-name
                     :old-name old-name})))))
