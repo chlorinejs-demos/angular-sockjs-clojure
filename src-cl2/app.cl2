@@ -1,4 +1,4 @@
-(load-file "../../../node_modules/angular-cl2/src/angular.cl2")
+(load-file "angular-cl2/src/angular.cl2")
 
 (def sockjs-url (+* window.location.protocol "//"
                     window.location.host
