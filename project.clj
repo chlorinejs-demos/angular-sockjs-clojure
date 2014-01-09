@@ -12,6 +12,7 @@
   :aot :all
   :plugins [[lein-cl2c "0.0.1-SNAPSHOT"]
             [lein-bower "0.1.0"]]
+  :node-dependencies [[angular-cl2 "0.3.3-SNAPSHOT"]]
   :bower-dependencies [[sockjs "~0.3.4"]
                        [angular "~1.0.6"]]
   :bower-directory "resources/public/js/lib"
