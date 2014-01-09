@@ -4,15 +4,13 @@ A chat application written in Clojure and AngularJS
 
 ## Usage
 
-You need nodejs to compile ChlorineJS and run client-side unit tests.
-
 Compile client side code to javascript once:
 ```
-npm run-script compile
+lein cl2c once
 ```
 or automatically recompile the file on changes:
 ```
-npm run-script watch
+lein cl2c auto
 ```
 
 Start the server:
