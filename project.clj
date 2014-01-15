@@ -11,11 +11,12 @@
   :main angular-sockjs-clojure.core
   :aot :all
   :plugins [[lein-cl2c "0.0.1-SNAPSHOT"]
-            [lein-bower "0.1.0"]]
-  :node-dependencies [[angular-cl2 "0.3.3-SNAPSHOT"]]
+            [lein-bower "0.2.0-SNAPSHOT"]]
+  :node-dependencies [[angular-cl2 "0.3.3-SNAPSHOT"]
+                      [socket-cl2 "0.2.0"]]
+  :bower {:directory "resources/public/js/lib"}
   :bower-dependencies [[sockjs "~0.3.4"]
                        [angular "~1.0.6"]]
-  :bower-directory "resources/public/js/lib"
   :cl2c {:client
          { ;; where to check for changes?
           :watch ["src-cl2", "test-cl2", "node_modules"]
