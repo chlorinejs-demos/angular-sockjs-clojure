@@ -1,5 +1,5 @@
-(load-file "angular-cl2/src/angular.cl2")
-
+(load-file "angular-cl2/src/core.cl2")
+(load-file "socket-cl2/src/client.cl2")
 (def sockjs-url (+* window.location.protocol "//"
                     window.location.host
                     "/chat"))
