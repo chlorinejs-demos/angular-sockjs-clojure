@@ -93,10 +93,8 @@
   [client-session]
   (let [id (:id client-session)]
     (timbre/info "init message from " id)
-    (whisper
-     id
-     {:type "init"
-      :name (:name client-session) :users (get-users)})))
+    (whisper id
+     ["init" {:name (:name client-session) :users (get-users)}])))
 
 (defn truncate
   "truncates a string to the given length"
@@ -109,9 +107,8 @@
   (let [id (:id client-session)]
     (timbre/info "text message from" id)
     (broadcast
-     {:name (id->name id)
-      :message (truncate (:message data) 140)
-      :type "text"}
+     ["text" {:name (id->name id)
+              :message (truncate (:message data) 140)}]
      id)))
 
 (defn update-name!
@@ -132,25 +129,24 @@
                      " wants to change their name to " new-name)
         (update-name! id new-name)
         (timbre/info "@clients: " @clients)
-        (broadcast {:type "change-name"
-                    :new-name new-name
-                    :old-name old-name})))))
+        (broadcast ["change-name" {:new-name new-name
+                                   :old-name old-name}])))))
 
 (defn on-data
   "Handles messages when an on-data event happens"
-  [data client-session]
+  [msg-type data client-session]
   ;; TODO: max data size?
   (timbre/info "Data: " data
                " from session of " (:id client-session))
   (cond
-   (and (= (:type data) "text")
+   (and (= msg-type "text")
         (seq (:message data)))
    (on-text data client-session)
 
-   (= (:type data) "init")
+   (= msg-type "init")
    (on-init client-session)
 
-   (and (= (:type data) "change-name")
+   (and (= msg-type "change-name")
         (seq (:name data)))
    (on-change-name data client-session)))
 
@@ -164,19 +160,17 @@
       (swap! clients
              assoc id (->Client new-name client-session))
       (let [current-users (get-users)]
-        (broadcast {:type "new-user" :name new-name
-                    :users current-users}
+        (broadcast ["new-user" {:name new-name
+                                :users current-users}]
                    id)
-        (whisper id
-                 {:type "init"
-                  :name new-name
-                  :users current-users})))
+        (whisper id ["init" {:name new-name
+                             :users current-users}])))
     client-session)
 
   ;; on message is call when a new message arrives at the server.
   (on-message [this client-session raw-msg]
-    (let [data (parse-string raw-msg true)]
-      (on-data data client-session))
+    (let [[msg-type data] (parse-string raw-msg true)]
+      (on-data msg-type data client-session))
     client-session)
 
   ;; when a connection closes this method is called
@@ -187,7 +181,7 @@
           client-name (id->name id)]
       (timbre/info "Good bye, " id "!")
       (swap! clients dissoc id)
-      (broadcast {:type "user-left" :name client-name}))
+      (broadcast ["user-left" {:name client-name}]))
     (timbre/info "Current users: " (get-users))
     client-session))
 
