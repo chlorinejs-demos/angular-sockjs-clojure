@@ -18,9 +18,9 @@ over the network."
 (defn scope-data-handler
   "Receives some data (and scope) from sockjs, do some transformations
    to the scope."
-  [data $scope]
-  (console.log "Got this msg: " data)
-  (case data.type
+  [msg-type data $scope]
+  (console.log "Got this msg: " msg-type data)
+  (case msg-type
     "init"
     (do
       (console.log "initializing... Go!")
@@ -93,8 +93,7 @@ over the network."
   If server responds true which means the new name was accepted,
   clears `newName` box, otherwise alerts the user."
     []
-    (if (.. socket (emit {:type "change-name"
-                          :name $scope.newName}))
+    (if (.. socket (emit "change-name" {:name $scope.newName}))
       (def$ newName "")
       (alert "There was an error changing your name")))
 
@@ -105,30 +104,26 @@ over the network."
   updated)
   - clears the `Message` box"
     []
-    (. socket (emit {:type "text"
-                     :message $scope.message}))
+    (. socket (emit "text" {:message $scope.message}))
     (.. $scope
         -messages
         (push {:text $scope.message, :user $scope.name}))
     (def$ message ""))
 
-  (defn socket.onmessage
-    "Adds `onmessage` method to sockjs instance by using `scope-data-handler`
-  helper function. Because sockjs is outside of scope, `$scope.$apply`
- is needed to update things."
-    [message]
-    ($scope.$apply
-     (fn [] (scope-data-handler (deserialize message.data) $scope)))))
+ ;;  Adds `onmessage` method to sockjs instance by using `scope-data-handler`
+ ;;  helper function. Because sockjs is outside of scope, `$scope.$apply`
+ ;; is needed to update things.
+  (. socket on :default
+     (fn [msg-type data respond! _]
+       ($scope.$apply
+        #(scope-data-handler msg-type data $scope))))
+  nil)
 
 (defservice socket
   [$rootScope]
-  (def sock (SockJS. sockjs-url nil
-                     #_{:protocols_whitelist
-                        ['xhr-polling]}))
+  (defsocket sock #(SockJS. sockjs-url nil
+                            #_{:protocols_whitelist
+                               ['xhr-polling]})
+    {:debug true})
   ;; Adds some basic methods: `onopen` and `emit` to the new sockjs instance
-  (defn sock.onopen []
-    (console.log "Connected"))
-  (defn sock.emit [data]
-    (. sock send (serialize data)))
-  ;; returns the modified sockjs instance
   sock)
